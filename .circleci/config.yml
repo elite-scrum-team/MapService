@@ -1,0 +1,36 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:10.10
+      
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+      
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          - v1-dependencies-
+
+      - run: npm install -no-audit
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+        
+      # run tests!
+      - run: npm test
+
+      - checkout
+
+      - setup_remote_docker: 
+          docker_layer_caching: true 
+
+      - run: |
+          TAG=v$CIRCLE_BUILD_NUM
+          docker build . --cache-from elitescrumteam/$IMAGE_NAME:latest -t elitescrumteam/$IMAGE_NAME:$TAG
+          docker login -u $DOCKER_USER -p $DOCKER_PASS   
+          docker push elitescrumteam/$IMAGE_NAME:$TAG
