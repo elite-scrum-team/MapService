@@ -1,0 +1,9 @@
+{
+  "development": {
+    "username": "halvorfb",
+    "password": "r01JDkh8",
+    "database": "halvorfb",
+    "host": "mysql.stud.iie.ntnu.no",
+    "dialect": "mysql"
+  }
+}
