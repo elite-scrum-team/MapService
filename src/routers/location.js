@@ -1,7 +1,7 @@
 const express = require('express');
 
 const LocationController = require('../controllers/LocationController');
-LocationController;
+
 const router = express.Router();
 
 router.get('/:id', async (req, res) => {
