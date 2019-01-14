@@ -1,4 +1,6 @@
 const db = require('../models');
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 
 module.exports = {
     async create(location) {
@@ -11,6 +13,28 @@ module.exports = {
 
         try {
             const res = await db.location.create(locationInstance);
+            return res.dataValues;
+        } catch (err) {
+            console.error(err);
+            throw err;
+        }
+    },
+
+    async retrieve(filter) {
+        const id__in = filter.id__in;
+
+        // Initialize query
+        const query = {};
+        if (filter.id__in) {
+            query.where = {
+                id: {
+                    [Op.in]: filter.id__in,
+                },
+            };
+        }
+
+        try {
+            const res = await db.location.findAll(query);
             return res.dataValues;
         } catch (err) {
             console.error(err);
