@@ -23,7 +23,7 @@ module.exports = {
     async retrieve(filter) {
         // Initialize query
         const query = {};
-        if (filter.id__in) {
+        if (filter.id__in && filter.id__in instanceof Array) {
             query.where = {
                 id: {
                     [Op.in]: filter.id__in,
