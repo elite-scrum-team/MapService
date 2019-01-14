@@ -21,8 +21,6 @@ module.exports = {
     },
 
     async retrieve(filter) {
-        const id__in = filter.id__in;
-
         // Initialize query
         const query = {};
         if (filter.id__in) {
@@ -35,7 +33,7 @@ module.exports = {
 
         try {
             const res = await db.location.findAll(query);
-            return res.dataValues;
+            return res;
         } catch (err) {
             console.error(err);
             throw err;
