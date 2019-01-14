@@ -18,6 +18,6 @@ app.get('/', async (req, res) => {
 });
 
 // routers
-app.use('/location', require('./routers/location'));
+app.use('api/v1/location', require('./routers/location'));
 
 app.listen(port, () => console.log('listening on port 8080'));
