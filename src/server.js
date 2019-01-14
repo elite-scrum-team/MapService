@@ -20,4 +20,4 @@ app.get('/', async (req, res) => {
 // routers
 app.use('api/v1/location', require('./routers/location'));
 
-app.listen(port, () => console.log('listening on port 8080'));
+app.listen(port, () => console.log(`Listening to port ${port}`));
