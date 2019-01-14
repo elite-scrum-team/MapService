@@ -10,8 +10,8 @@ router.get('/:id', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-    console.log(req.body);
     const instanceOrError = await LocationController.create(req.body.location);
+    console.log('Location Instance: ' + instanceOrError);
     return res.send(instanceOrError);
 });
 
