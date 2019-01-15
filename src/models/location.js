@@ -8,6 +8,8 @@ module.exports = (sequelize, DataTypes) => {
             defaultValue: Sequelize.UUIDV4,
         },
         coordinate: DataTypes.GEOMETRY('POINT'),
+        city: DataTypes.TEXT,
+        street: DataTypes.TEXT,
     });
 
     Location.associate = models => {

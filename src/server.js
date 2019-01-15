@@ -23,5 +23,6 @@ app.get('/', async (req, res) => {
 
 // routers
 app.use('/api/v1/location', require('./routers/location'));
+app.use('/api/v1/municipality', require('./routers/municipality'));
 
 app.listen(port, () => console.log(`Listening to port ${port}`));
