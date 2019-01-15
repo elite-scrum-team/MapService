@@ -22,6 +22,7 @@ module.exports = {
                 result
             );
             const municipalityName = locationData.municipality;
+            console.log('Kommune: ', municipalityName);
 
             // Append city and route to locationInstance
             locationInstance.city = locationData.city;
@@ -39,7 +40,7 @@ module.exports = {
             });
 
             // If the municipality does not exist, add it
-            if (!municipality) {
+            if (!municipality && municipalityName) {
                 console.log(
                     municipalityName + ' does not exist, adds it to db'
                 );
@@ -58,7 +59,6 @@ module.exports = {
             }
 
             const res = await db.location.create(locationInstance);
-            console.log(res);
             return res.dataValues;
         } catch (err) {
             console.error(err);
