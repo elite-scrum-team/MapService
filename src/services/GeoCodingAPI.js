@@ -12,7 +12,7 @@ module.exports = {
             // Initialize URL to Google Geocoding API
             let url = `https://maps.googleapis.com/maps/api/geocode/json?key=${
                 process.env.GOOGLE_GEOCODING_API_KEY
-            }`;
+            }&language=nb`;
             url += `&${querystring.stringify(query)}`;
 
             // Fetch
@@ -84,7 +84,7 @@ module.exports = {
             // Extract data
             const municipality =
                 municipalityData.length > 0
-                    ? municipalityData[0].long_name
+                    ? municipalityData[0].short_name
                     : null;
             const city = cityData.length > 0 ? cityData[0].long_name : null;
             const route = routeData.length > 0 ? routeData[0].long_name : null;
