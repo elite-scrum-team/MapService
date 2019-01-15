@@ -81,6 +81,9 @@ module.exports = {
     async retrieveOne(locationId) {
         try {
             const location = await db.location.findByPk(locationId);
+            if (location) {
+                await location.reload({ include: [{ all: true }] });
+            }
             return location;
         } catch (err) {
             console.error(err);
