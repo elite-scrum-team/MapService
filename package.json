@@ -5,7 +5,7 @@
     "main": "server.js",
     "scripts": {
         "start": "node src/server.js",
-        "test": "jest",
+        "test": "mocha src/test/*.test.js",
         "dev": "nodemon src/server.js"
     },
     "repository": {
@@ -30,11 +30,16 @@
         "prettier": "^1.15.3",
         "pretty-quick": "^1.8.0",
         "querystring": "^0.2.0",
-        "sequelize": "^4.42.0"
+        "sequelize": "^4.42.0",
+        "sequelize-test-helpers": "^1.0.7"
     },
     "devDependencies": {
-        "jest": "^23.6.0",
-        "sequelize-cli": "^5.4.0"
+        "chai": "^4.2.0",
+        "mocha": "^5.2.0",
+        "proxyquire": "^2.1.0",
+        "sequelize-cli": "^5.4.0",
+        "sinon": "^7.2.2",
+        "sinon-chai": "^3.3.0"
     },
     "husky": {
         "hooks": {
