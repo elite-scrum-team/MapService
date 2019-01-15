@@ -46,7 +46,9 @@ module.exports = {
                 const model = await db.municipality.create({
                     name: municipalityName,
                 });
-                locationInstance.municipalityId = model.id;
+                if (model)
+                    // dette er for å sjekke om modellen eksisterer. trenger denne til testingen
+                    locationInstance.municipalityId = model.id;
             } else {
                 // If it exists, use its id in the location instance
                 console.log(
@@ -56,6 +58,7 @@ module.exports = {
             }
 
             const res = await db.location.create(locationInstance);
+            console.log(res);
             return res.dataValues;
         } catch (err) {
             console.error(err);
@@ -99,7 +102,7 @@ module.exports = {
 
 // FUTURE SQL queries
 
-/* 
+/*
 Check if a point in locations are within a given circle (buffer) with radius 3
 SELECT * FROM locations as l WHERE ST_WITHIN(l.coordinate, ST_Buffer(ST_GeomFromText('POINT(63.428275 10.393464)'), 3));
 
