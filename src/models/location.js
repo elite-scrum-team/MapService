@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-    return sequelize.define('location', {
+    const Location = sequelize.define('location', {
         id: {
             primaryKey: true,
             type: DataTypes.UUID,
@@ -9,4 +9,10 @@ module.exports = (sequelize, DataTypes) => {
         },
         coordinate: DataTypes.GEOMETRY('POINT'),
     });
+
+    Location.associate = models => {
+        Location.belongsTo(models.municipality);
+    };
+
+    return Location;
 };

@@ -2,6 +2,8 @@ const db = require('../models');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 
+const GeoCodingAPI = require('../services/GeoCodingAPI');
+
 module.exports = {
     async create(location) {
         const locationInstance = {
@@ -12,6 +14,42 @@ module.exports = {
         };
 
         try {
+            const r = await GeoCodingAPI.geodata.retrieve(location);
+            const result = await r.json();
+
+            // Get municipality name from location
+            const municipalityName = await GeoCodingAPI.convert.toMuncipality(
+                result
+            );
+
+            // Find existing municipality with that name
+            const municipality = await db.municipality.findOne({
+                where: {
+                    name: Sequelize.where(
+                        Sequelize.fn('LOWER', Sequelize.col('name')),
+                        'LIKE',
+                        '%' + municipalityName + '%'
+                    ),
+                },
+            });
+
+            // If the municipality does not exist, add it
+            if (!municipality) {
+                console.log(
+                    municipalityName + ' does not exist, adds it to db'
+                );
+                const model = await db.municipality.create({
+                    name: municipalityName,
+                });
+                locationInstance.municipalityId = model.id;
+            } else {
+                // If it exists, use its id in the location instance
+                console.log(
+                    municipalityName + ' already exists, appends it to instance'
+                );
+                locationInstance.municipalityId = municipality.id;
+            }
+
             const res = await db.location.create(locationInstance);
             return res.dataValues;
         } catch (err) {

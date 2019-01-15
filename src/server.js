@@ -1,10 +1,14 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
+const dotenv = require('dotenv');
 
 const db = require('./models');
 
-db.sequelize.sync();
+db.sequelize.sync({ alter: true }).then(() => {
+    db.municipality.create();
+});
+dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 8080;
