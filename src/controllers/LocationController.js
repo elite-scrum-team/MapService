@@ -75,7 +75,6 @@ module.exports = {
         // Initialize query
         const query = {};
         if (filter.id__in && filter.id__in instanceof Array) {
-            console.log('inside ifstatment');
             query.where = {
                 id: {
                     [Op.in]: filter.id__in,
