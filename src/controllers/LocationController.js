@@ -59,6 +59,11 @@ module.exports = {
                 locationInstance.municipalityId = municipality.id;
             }
 
+            // Insert raw GeoData into the database
+            /*  if(result) {
+                await db.geodata.create({raw: result.results});
+            } */
+
             const res = await db.location.create(locationInstance);
             return res.dataValues;
         } catch (err) {
@@ -74,6 +79,14 @@ module.exports = {
             query.where = {
                 id: {
                     [Op.in]: filter.id__in,
+                },
+            };
+        }
+        if (filter.municipality) {
+            query.where = {
+                ...query.where,
+                municipalityId: {
+                    [Op.like]: filter.municipality,
                 },
             };
         }
