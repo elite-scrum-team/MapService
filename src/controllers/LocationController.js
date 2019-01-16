@@ -70,6 +70,7 @@ module.exports = {
         // Initialize query
         const query = {};
         if (filter.id__in && filter.id__in instanceof Array) {
+            console.log('inside ifstatment');
             query.where = {
                 id: {
                     [Op.in]: filter.id__in,
@@ -79,6 +80,7 @@ module.exports = {
 
         try {
             const res = await db.location.findAll(query);
+            console.log(res);
             return res;
         } catch (err) {
             console.error(err);
@@ -89,6 +91,7 @@ module.exports = {
     async retrieveOne(locationId) {
         try {
             const location = await db.location.findByPk(locationId);
+
             if (location) {
                 await location.reload({ include: [{ all: true }] });
             }
