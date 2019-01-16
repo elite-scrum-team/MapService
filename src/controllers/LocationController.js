@@ -18,11 +18,11 @@ module.exports = {
             const result = await r.json();
 
             // Get municipality name from location
-            const locationData = await GeoCodingAPI.convert.toLocationData(
-                result
-            );
 
+            const locationData =
+                (await GeoCodingAPI.convert.toLocationData(result)) || {};
             const municipalityName = locationData.municipality;
+
             console.log('Kommune: ', municipalityName);
 
             // Append city and route to locationInstance
@@ -51,7 +51,7 @@ module.exports = {
                 if (model)
                     // dette er for å sjekke om modellen eksisterer. trenger denne til testingen
                     locationInstance.municipalityId = model.id;
-            } else {
+            } else if (municipality) {
                 // If it exists, use its id in the location instance
                 console.log(
                     municipalityName + ' already exists, appends it to instance'
