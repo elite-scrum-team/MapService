@@ -16,13 +16,13 @@ module.exports = {
             url += `&${querystring.stringify(query)}`;
 
             // Fetch
-            return await fetch(url, {
+            return (await fetch(url, {
                 method: 'GET',
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json',
                 },
-            });
+            })).json();
         },
     },
 

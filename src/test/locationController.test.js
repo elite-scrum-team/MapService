@@ -5,6 +5,7 @@ let expect = chai.expect;
 const sinon = require('sinon');
 
 const { makeMockModels } = require('sequelize-test-helpers');
+const mockGoogleAPI = require('./__mock__/GeoCodingAPI');
 
 const mockModels = makeMockModels({
     location: {
@@ -18,7 +19,9 @@ const mockModels = makeMockModels({
 
 const save = proxyquire('../controllers/LocationController', {
     '../models': mockModels,
+    '../services/GeoCodingAPI': mockGoogleAPI,
 });
+
 let result;
 
 const fakeCoordinate = { dataValues: sinon.stub(), reload: sinon.stub() };
@@ -95,19 +98,6 @@ describe('Location testing', () => {
             expect(result).to.deep.equal(undefined);
         });
     });
-    // denne må gjøres på en ordenklig måte
-    context('testing retrieve() on locations that exsists', () => {
-        before(async () => {
-            mockModels.location.findByPk.resolves(fakeCoordinate);
-            result = await save.retrieve(location);
-        });
-
-        after(resetStubs);
-
-        it('called User.findAll in controller', () => {});
-
-        it('returned the filtered coordinates that doesnt exists', () => {});
-    });
 
     context('testing create()', () => {
         before(async () => {
@@ -124,5 +114,22 @@ describe('Location testing', () => {
         it('called Municipality.findOne', () => {
             expect(mockModels.municipality.findOne).to.have.been.called;
         });
+
+        it('called Municipality.create', () => {
+            expect(mockModels.municipality.create).to.have.been.called;
+        });
+    });
+
+    context('testing retrieve() on locations that exsists', () => {
+        before(async () => {
+            mockModels.location.findByPk.resolves(fakeCoordinate);
+            result = await save.retrieve(location);
+        });
+
+        after(resetStubs);
+
+        it('', () => {});
+
+        it('', () => {});
     });
 });

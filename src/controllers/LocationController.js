@@ -14,8 +14,7 @@ module.exports = {
         };
 
         try {
-            const r = await GeoCodingAPI.geodata.retrieve(location);
-            const result = await r.json();
+            const result = await GeoCodingAPI.geodata.retrieve(location);
 
             // Get municipality name from location
 
@@ -49,7 +48,7 @@ module.exports = {
                     name: municipalityName,
                 });
                 if (model)
-                    // dette er for å sjekke om modellen eksisterer. trenger denne til testingen
+                    //Checking if model exists
                     locationInstance.municipalityId = model.id;
             } else if (municipality) {
                 // If it exists, use its id in the location instance
