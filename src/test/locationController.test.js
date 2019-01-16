@@ -124,8 +124,5 @@ describe('Location testing', () => {
         it('called Municipality.findOne', () => {
             expect(mockModels.municipality.findOne).to.have.been.called;
         });
-        it('called Municipality.create', () => {
-            expect(mockModels.municipality.create).to.have.been.called;
-        });
     });
 });

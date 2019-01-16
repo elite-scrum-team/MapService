@@ -50,7 +50,7 @@ module.exports = {
                 if (model)
                     // dette er for å sjekke om modellen eksisterer. trenger denne til testingen
                     locationInstance.municipalityId = model.id;
-            } else {
+            } else if (municipality) {
                 // If it exists, use its id in the location instance
                 console.log(
                     municipalityName + ' already exists, appends it to instance'
