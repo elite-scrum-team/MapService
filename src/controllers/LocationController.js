@@ -21,7 +21,9 @@ module.exports = {
             const locationData = await GeoCodingAPI.convert.toLocationData(
                 result
             );
-            const municipalityName = locationData.municipality;
+            const municipalityName = locationData
+                ? locationData.municipality
+                : null;
             console.log('Kommune: ', municipalityName);
 
             // Append city and route to locationInstance
