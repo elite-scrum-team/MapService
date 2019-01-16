@@ -5,6 +5,7 @@ let expect = chai.expect;
 const sinon = require('sinon');
 
 const { makeMockModels } = require('sequelize-test-helpers');
+const mockGoogleAPI = require('./__mock__/GeoCodingAPI');
 
 const mockModels = makeMockModels({
     location: {
@@ -18,10 +19,12 @@ const mockModels = makeMockModels({
 
 const save = proxyquire('../controllers/LocationController', {
     '../models': mockModels,
+    '../services/GeoCodingAPI': mockGoogleAPI,
 });
+
 let result;
 
-const fakeCoordinate = { dataValues: sinon.stub(), reload: sinon.stub() };
+const fakeLocation = { dataValues: sinon.stub(), reload: sinon.stub() };
 
 describe('Location testing', () => {
     const location = {
@@ -38,7 +41,7 @@ describe('Location testing', () => {
         mockModels.municipality.findOne.resetHistory();
         mockModels.municipality.create.resetHistory();
 
-        fakeCoordinate.dataValues.resetHistory();
+        fakeLocation.dataValues.resetHistory();
     };
 
     context('testing retrieveOne() on location that doesnt exist ', () => {
@@ -54,7 +57,7 @@ describe('Location testing', () => {
         });
 
         it("didn't call location.update", () => {
-            expect(fakeCoordinate.dataValues).not.to.have.been.called;
+            expect(fakeLocation.dataValues).not.to.have.been.called;
         });
 
         it('returned empty object', () => {
@@ -64,7 +67,7 @@ describe('Location testing', () => {
 
     context('testing retrieveOne() on location that exists ', () => {
         before(async () => {
-            mockModels.location.findByPk.resolves(fakeCoordinate);
+            mockModels.location.findByPk.resolves(fakeLocation);
             result = await save.retrieveOne(location.id);
         });
 
@@ -75,13 +78,13 @@ describe('Location testing', () => {
         });
 
         it('returned the coordinate', () => {
-            expect(result).to.deep.equal(fakeCoordinate);
+            expect(result).to.deep.equal(fakeLocation);
         });
     });
 
     context('testing retrieve() on locations that does not exists', () => {
         before(async () => {
-            mockModels.location.findByPk.resolves(fakeCoordinate);
+            mockModels.location.findByPk.resolves(fakeLocation);
             result = await save.retrieve(location);
         });
 
@@ -95,23 +98,10 @@ describe('Location testing', () => {
             expect(result).to.deep.equal(undefined);
         });
     });
-    // denne må gjøres på en ordenklig måte
-    context('testing retrieve() on locations that exsists', () => {
-        before(async () => {
-            mockModels.location.findByPk.resolves(fakeCoordinate);
-            result = await save.retrieve(location);
-        });
-
-        after(resetStubs);
-
-        it('called User.findAll in controller', () => {});
-
-        it('returned the filtered coordinates that doesnt exists', () => {});
-    });
 
     context('testing create()', () => {
         before(async () => {
-            mockModels.location.create.resolves(fakeCoordinate);
+            mockModels.location.create.resolves(fakeLocation);
             result = await save.create(location);
         });
 
@@ -123,6 +113,44 @@ describe('Location testing', () => {
 
         it('called Municipality.findOne', () => {
             expect(mockModels.municipality.findOne).to.have.been.called;
+        });
+
+        it('called Municipality.create', () => {
+            expect(mockModels.municipality.create).to.have.been.called;
+        });
+    });
+
+    context('testing retrieve() on locations that exsists', () => {
+        before(async () => {
+            mockModels.location.findAll.resolves(fakeLocation);
+            result = await save.retrieve('blue');
+        });
+
+        after(resetStubs);
+
+        it('checking if findAll is called ', () => {
+            expect(mockModels.location.findAll).to.have.been.called;
+        });
+
+        it('returned the location', () => {
+            expect(result).to.deep.equal(fakeLocation);
+        });
+    });
+
+    context('testing retrieveOne() on locations that exsists', () => {
+        before(async () => {
+            mockModels.location.findByPk.resolves(fakeLocation);
+            result = await save.retrieveOne(location.id);
+        });
+
+        after(resetStubs);
+
+        it('checking if findByPk is called ', () => {
+            expect(mockModels.location.findByPk).to.have.been.called;
+        });
+
+        it('returned the location', () => {
+            expect(result).to.deep.equal(fakeLocation);
         });
     });
 });

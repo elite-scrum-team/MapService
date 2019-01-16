@@ -14,8 +14,7 @@ module.exports = {
         };
 
         try {
-            const r = await GeoCodingAPI.geodata.retrieve(location);
-            const result = await r.json();
+            const result = await GeoCodingAPI.geodata.retrieve(location);
 
             // Get municipality name from location
 
@@ -49,7 +48,7 @@ module.exports = {
                     name: municipalityName,
                 });
                 if (model)
-                    // dette er for å sjekke om modellen eksisterer. trenger denne til testingen
+                    //Checking if model exists
                     locationInstance.municipalityId = model.id;
             } else if (municipality) {
                 // If it exists, use its id in the location instance
@@ -76,6 +75,7 @@ module.exports = {
         // Initialize query
         const query = {};
         if (filter.id__in && filter.id__in instanceof Array) {
+            console.log('inside ifstatment');
             query.where = {
                 id: {
                     [Op.in]: filter.id__in,
@@ -93,6 +93,7 @@ module.exports = {
 
         try {
             const res = await db.location.findAll(query);
+            console.log(res);
             return res;
         } catch (err) {
             console.error(err);
@@ -103,6 +104,7 @@ module.exports = {
     async retrieveOne(locationId) {
         try {
             const location = await db.location.findByPk(locationId);
+
             if (location) {
                 await location.reload({ include: [{ all: true }] });
             }
