@@ -18,12 +18,10 @@ module.exports = {
             const result = await r.json();
 
             // Get municipality name from location
-            const locationData = await GeoCodingAPI.convert.toLocationData(
-                result
-            );
-            const municipalityName = locationData
-                ? locationData.municipality
-                : null;
+            const locationData =
+                (await GeoCodingAPI.convert.toLocationData(result)) || {};
+            const municipalityName = locationData.municipality;
+
             console.log('Kommune: ', municipalityName);
 
             // Append city and route to locationInstance
