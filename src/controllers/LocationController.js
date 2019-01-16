@@ -21,6 +21,7 @@ module.exports = {
             const locationData = await GeoCodingAPI.convert.toLocationData(
                 result
             );
+
             const municipalityName = locationData.municipality;
             console.log('Kommune: ', municipalityName);
 
