@@ -5,9 +5,7 @@ const dotenv = require('dotenv');
 
 const db = require('./models');
 
-db.sequelize.sync({ alter: true }).then(() => {
-    db.municipality.create();
-});
+db.sequelize.sync({ alter: true });
 dotenv.config();
 
 const app = express();
