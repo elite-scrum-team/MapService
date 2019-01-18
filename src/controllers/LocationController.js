@@ -113,13 +113,19 @@ module.exports = {
             throw err;
         }
     },
+
+    async retrieveWithDistance(filter, point, dist) {
+        try {
+            return await sequelize.query(
+                'SELECT id, dist FROM (SELECT id, ST_Distance_Sphere(coordinate, point(?, ?)) as dist FROM locations) AS locations_with_dist WHERE dist < ?;',
+                {
+                    type: db.sequelize.QueryTypes.SELECT,
+                    replacements: [point.lat, point.lng, dist],
+                }
+            );
+        } catch (err) {
+            console.error(err);
+            return null;
+        }
+    },
 };
-
-// FUTURE SQL queries
-
-/*
-Check if a point in locations are within a given circle (buffer) with radius 3
-SELECT * FROM locations as l WHERE ST_WITHIN(l.coordinate, ST_Buffer(ST_GeomFromText('POINT(63.428275 10.393464)'), 3));
-
-Calculates the distance of given points
-SELECT ST_Distance_Sphere(locations.coordinate, ST_GeomFromText('POINT(63.428275 10.393464)')) from locations; */

@@ -20,4 +20,14 @@ router.get('/:id', async (req, res) => {
     return res.status(instance ? 200 : 404).send(instance);
 });
 
+router.get('/close/:lat/:lng', async (req, res) => {
+    const instances = await LocationController.retrieve(
+        req.query,
+        req.params,
+        10000000
+    );
+    console.log(instances);
+    await res.send('Nice!');
+});
+
 module.exports = router;
