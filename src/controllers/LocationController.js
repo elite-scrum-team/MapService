@@ -91,7 +91,9 @@ module.exports = {
         }
 
         try {
-            const res = await db.location.findAll(query);
+            const res = await db.location.findAll(query, {
+                include: [{ all: true }],
+            });
             console.log(res);
             return res;
         } catch (err) {
