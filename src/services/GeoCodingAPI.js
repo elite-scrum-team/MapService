@@ -41,11 +41,9 @@ module.exports = {
                 r.address_components
                     ? r.address_components.filter(
                           d =>
-                              (
-                                  d.types.filter(e => wantedData[0] === e)
-                                      .length > 0
-                              ).length > 0
-                      )
+                              d.types.filter(e => wantedData[0] === e).length >
+                              0
+                      ).length > 0
                     : false
             );
 
