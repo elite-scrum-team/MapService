@@ -93,7 +93,7 @@ module.exports = {
 
             return {
                 municipality: municipality
-                    ? municipality.replace('Municipality', 'Kommune')
+                    ? municipality.replace(' Municipality', ' ')
                     : 'Ukjent',
                 city: city,
                 route: route + (streetNumber ? ' ' + streetNumber : ''),
