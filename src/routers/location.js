@@ -8,7 +8,7 @@ router.get('/close/:lat/:lng', async (req, res) => {
     const instances = await LocationController.retrieveWithDistance(
         req.query,
         req.params,
-        1000
+        2000
     );
     if (instances) await res.send(instances);
     else await res.status(500).send({ error: 'Error' });
