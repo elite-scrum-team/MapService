@@ -30,4 +30,10 @@ router.get('/:id', async (req, res) => {
     return res.status(instance ? 200 : 404).send(instance);
 });
 
+router.get('/info/:lat/:lng', async (req, res) => {
+    const instance = await LocationController.getLocationInfo(req.params);
+    if (instance) await res.send(instance);
+    else await res.status(500).send({ error: 'Could not get info' });
+});
+
 module.exports = router;

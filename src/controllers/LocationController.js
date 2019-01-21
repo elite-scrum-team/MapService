@@ -3,6 +3,7 @@ const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 
 const GeoCodingAPI = require('../services/GeoCodingAPI');
+const helpers = require('../utils/helpers');
 
 module.exports = {
     async create(location) {
@@ -14,54 +15,13 @@ module.exports = {
         };
 
         try {
-            const result = await GeoCodingAPI.geodata.retrieve(location);
-
-            // Get municipality name from location
-
             const locationData =
-                (await GeoCodingAPI.convert.toLocationData(result)) || {};
-            const municipalityName = locationData.municipality;
-
-            console.log('Kommune: ', municipalityName);
+                (await helpers.locateFindOrCreate(location)) || {};
 
             // Append city and route to locationInstance
             locationInstance.city = locationData.city;
             locationInstance.street = locationData.route;
-
-            // Find existing municipality with that name
-            const municipality = await db.municipality.findOne({
-                where: {
-                    name: Sequelize.where(
-                        Sequelize.fn('LOWER', Sequelize.col('name')),
-                        'LIKE',
-                        '%' + municipalityName + '%'
-                    ),
-                },
-            });
-
-            // If the municipality does not exist, add it
-            if (!municipality && municipalityName) {
-                console.log(
-                    municipalityName + ' does not exist, adds it to db'
-                );
-                const model = await db.municipality.create({
-                    name: municipalityName,
-                });
-                if (model)
-                    //Checking if model exists
-                    locationInstance.municipalityId = model.id;
-            } else if (municipality) {
-                // If it exists, use its id in the location instance
-                console.log(
-                    municipalityName + ' already exists, appends it to instance'
-                );
-                locationInstance.municipalityId = municipality.id;
-            }
-
-            // Insert raw GeoData into the database
-            /*  if(result) {
-                await db.geodata.create({raw: result.results});
-            } */
+            locationInstance.municipalityId = locationData.municipalityId;
 
             const res = await db.location.create(locationInstance);
             return res.dataValues;
@@ -123,6 +83,20 @@ module.exports = {
                     replacements: [point.lng, point.lat, dist],
                 }
             );
+        } catch (err) {
+            console.error(err);
+            return null;
+        }
+    },
+
+    async getLocationInfo({ lat, lng }) {
+        try {
+            // Get location data from Google GeoCoding API
+            const location = { lat, lng };
+            const locationData =
+                (await helpers.locateFindOrCreate(location)) || {};
+
+            return locationData;
         } catch (err) {
             console.error(err);
             return null;
