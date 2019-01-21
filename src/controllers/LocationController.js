@@ -117,10 +117,10 @@ module.exports = {
     async retrieveWithDistance(filter, point, dist) {
         try {
             return await db.sequelize.query(
-                'SELECT id, dist FROM (SELECT id, ST_Distance_Sphere(coordinate, point(?, ?)) as dist FROM locations) AS locations_with_dist WHERE dist < ? ORDER BY dist;',
+                'SELECT id, dist FROM (SELECT id, ST_Distance_Sphere(point(ST_Y(coordinate), ST_X(coordinate)), point(?, ?)) as dist FROM locations) AS locations_with_dist WHERE dist < ?  ORDER BY dist;',
                 {
                     type: db.sequelize.QueryTypes.SELECT,
-                    replacements: [point.lat, point.lng, dist],
+                    replacements: [point.lng, point.lat, dist],
                 }
             );
         } catch (err) {
