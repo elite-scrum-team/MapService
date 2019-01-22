@@ -8,8 +8,8 @@ module.exports = {
             const where = {};
 
             // Add name filter
-            if (query.filter) {
-                where.name = query.filter;
+            if (query.name) {
+                where.name = query.name;
             }
 
             const res = await db.municipality.findAll({
