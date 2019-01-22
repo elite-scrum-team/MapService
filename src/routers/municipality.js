@@ -5,7 +5,7 @@ const MunicipalityController = require('../controllers/MunicipalityController');
 const router = express.Router();
 
 router.get('/', async (req, res) => {
-    const instances = await MunicipalityController.retrieve();
+    const instances = await MunicipalityController.retrieve(req.query);
     return res.status(200).send(instances);
 });
 

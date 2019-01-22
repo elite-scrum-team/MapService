@@ -3,10 +3,18 @@ const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 
 module.exports = {
-    async retrieve() {
+    async retrieve(query) {
         try {
+            const where = {};
+
+            // Add name filter
+            if (query.filter) {
+                where.name = query.filter;
+            }
+
             const res = await db.municipality.findAll({
-                order: [['name', 'DESC']],
+                order: [['name', 'ASC']],
+                where,
             });
             return res;
         } catch (err) {
