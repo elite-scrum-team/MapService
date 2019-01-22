@@ -5,7 +5,9 @@ const Op = Sequelize.Op;
 module.exports = {
     async retrieve() {
         try {
-            const res = await db.municipality.findAll();
+            const res = await db.municipality.findAll({
+                order: [['name', 'DESC']],
+            });
             return res;
         } catch (err) {
             console.error(err);
