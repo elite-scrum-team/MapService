@@ -80,7 +80,7 @@ module.exports = {
                 'SELECT id, dist FROM (SELECT id, ST_Distance_Sphere(point(ST_Y(coordinate), ST_X(coordinate)), point(?, ?)) as dist FROM locations) AS locations_with_dist WHERE dist < ?  ORDER BY dist;',
                 {
                     type: db.sequelize.QueryTypes.SELECT,
-                    replacements: [point.lng, point.lat, dist],
+                    replacements: [Number(point.lng), Number(point.lat), dist],
                 }
             );
         } catch (err) {
