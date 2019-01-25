@@ -5,7 +5,7 @@ let expect = chai.expect;
 const sinon = require('sinon');
 
 const { makeMockModels } = require('sequelize-test-helpers');
-const mockGoogleAPI = require('./__mock__/GeoCodingAPI');
+const helpers = require('./__mock__/helpers');
 
 const mockModels = makeMockModels({
     location: {
@@ -19,7 +19,7 @@ const mockModels = makeMockModels({
 
 const save = proxyquire('../controllers/LocationController', {
     '../models': mockModels,
-    '../services/GeoCodingAPI': mockGoogleAPI,
+    '../utils/helpers': helpers,
 });
 
 let result;

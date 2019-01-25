@@ -2,7 +2,6 @@ const db = require('../models');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 
-const GeoCodingAPI = require('../services/GeoCodingAPI');
 const helpers = require('../utils/helpers');
 
 /**
