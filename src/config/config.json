@@ -1,9 +1,9 @@
 {
     "development": {
-        "username": "MapService",
-        "password": "gguiLxbU0jsaoUGDdlTG2Tj%oX]WP5pkRpOp",
-        "database": "MapService",
-        "host": "35.228.44.201",
+        "username": "anders",
+        "password": "WCJEzJed4bUhCp9",
+        "database": "Map",
+        "host": "35.228.83.127",
         "dialect": "mysql"
     }
 }
