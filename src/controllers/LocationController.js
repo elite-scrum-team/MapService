@@ -5,7 +5,19 @@ const Op = Sequelize.Op;
 const GeoCodingAPI = require('../services/GeoCodingAPI');
 const helpers = require('../utils/helpers');
 
+/**
+    Location Controller
+    @module controllers/LocationController
+*/
 module.exports = {
+    /** This method creates a location based on a latLng input.
+        It first asks the Google GeoCoding API about the meta-data,
+        like municipality, street and route. 
+        Then it checks if the municipality found already exists in the DB,
+        and creates it if it doesn't. Then it creates a location.
+        @function
+        @return A location object if successful.
+    */
     async create(location) {
         const locationInstance = {
             coordinate: {
@@ -15,6 +27,7 @@ module.exports = {
         };
 
         try {
+            // Gets the location meta data
             const locationData =
                 (await helpers.locateFindOrCreate(location)) || {};
 
@@ -31,9 +44,15 @@ module.exports = {
         }
     },
 
+    /**
+     *  @function
+     *  @param {Object} filter - Filters like locationIds and municipality
+     *  @return array of locations, in form of objects
+     */
     async retrieve(filter) {
         // Initialize query
         const query = {};
+        // Location Ids filter
         if (filter.id__in && filter.id__in instanceof Array) {
             query.where = {
                 id: {
@@ -41,6 +60,7 @@ module.exports = {
                 },
             };
         }
+        // Municipality filter
         if (filter.municipality) {
             query.where = {
                 ...query.where,
@@ -51,6 +71,7 @@ module.exports = {
         }
 
         try {
+            // Get all the stuff
             query.include = [{ all: true }];
             const res = await db.location.findAll(query);
             return res;
@@ -60,6 +81,10 @@ module.exports = {
         }
     },
 
+    /**
+     * @function
+     * @param {string} locationId - The id of the location to retrieve
+     */
     async retrieveOne(locationId) {
         try {
             const location = await db.location.findByPk(locationId);
@@ -74,6 +99,13 @@ module.exports = {
         }
     },
 
+    /**
+     * Retrieves all locations within a distance of a specific point
+     * @function
+     * @param {Object} filter - Object with filters to filter by
+     * @param {Object} point - The location to calculate the distances from. Includes lat and lng values
+     * @param {Number} dist  - The max distance to filter by
+     */
     async retrieveWithDistance(filter, point, dist) {
         try {
             return await db.sequelize.query(
@@ -89,6 +121,11 @@ module.exports = {
         }
     },
 
+    /**
+     * Gets meta-data of a specific location, like municipality, street name and route.
+     * @param {Object} param0 - Location object, contains lat and lng.
+     * @returns An object of the meta data. Includes 'municipality', 'street', and 'route'.
+     */
     async getLocationInfo({ lat, lng }) {
         try {
             // Get location data from Google GeoCoding API

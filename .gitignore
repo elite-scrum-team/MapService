@@ -3,3 +3,6 @@
 .idea
 /.idea
 /migrations
+coverage
+.nyc_output
+out

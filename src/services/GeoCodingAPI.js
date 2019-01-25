@@ -1,8 +1,26 @@
 const fetch = require('node-fetch');
 const querystring = require('querystring');
 
+/**
+ * A service that consists of communicating with the Google Geocoding API,
+ * and for extracting the data.
+ * @module services/GeoCodingAPI
+ */
 module.exports = {
+    /**
+     * Object containing functions for communicating with the Google Geocoding API
+     * @exports services/geodata
+     * @namespace geodata
+     */
     geodata: {
+        /**
+         * An async functions that retrieves data from the Google Geocoding API,
+         * and returns the data raw
+         * @function
+         * @param {Object} location - Object containing lat and lng values
+         * @returns The raw data from the Google API, in form of a Object
+         * @memberof geodata
+         */
         async retrieve(location) {
             // Initialize query
             const query = {
@@ -27,7 +45,12 @@ module.exports = {
     },
 
     convert: {
-        // Gets the muncipality of a given geoData from the Google Geocoding API
+        /**
+         * Gets the muncipality of a given geoData from the Google Geocoding API
+         * @function
+         * @param {Object} geoData - Raw data from the Google Geocoding API in form of an object
+         * @returns An object with the municipality, city and route.
+         */
         async toLocationData(geoData) {
             const wantedData = [
                 'administrative_area_level_2',

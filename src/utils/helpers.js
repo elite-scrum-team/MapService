@@ -3,7 +3,18 @@ const Sequelize = require('sequelize');
 
 const GeoCodingAPI = require('../services/GeoCodingAPI');
 
+/**
+ * Helper-functions
+ * @module
+ */
 module.exports = {
+    /**
+     * Based on a location object, gets the meta data from Google Gecoding API
+     * , and creates a municipality-entity in the db if it does not already exists.
+     * @function
+     * @param {Object} location - Location object containing lat and lng
+     * @returns An object containing the meta data, like municipality, city and route.
+     */
     async locateFindOrCreate(location) {
         const result = await GeoCodingAPI.geodata.retrieve(location);
 
